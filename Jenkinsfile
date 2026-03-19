@@ -1,6 +1,8 @@
 pipeline {
     agent any
-
+    tools {
+        maven 'Maven' // Adjust the Maven version as needed}
+    }
     stages {
         stage('Checkout') {
             steps {
