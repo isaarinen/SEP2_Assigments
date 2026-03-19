@@ -28,5 +28,23 @@ pipeline {
                 )
             }
         }
+        stage('Deploy Docker Image') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: "${DOCKERHUB_CREDENTIALS}",
+                    usernameVariable: 'DOCKERHUB_USER',
+                    passwordVariable: 'DOCKERHUB_PASS'
+                )]) {
+                    sh '''
+                        echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USER" --password-stdin
+                        docker build -t "$DOCKERHUB_REPO:$BUILD_NUMBER" .
+                        docker push "$DOCKERHUB_REPO:$BUILD_NUMBER"
+                        docker tag "$DOCKERHUB_REPO:$BUILD_NUMBER" "$DOCKERHUB_REPO:latest"
+                        docker push "$DOCKERHUB_REPO:latest"
+                        docker logout
+                    '''
+                }
+            }
+        }
     }
 }
