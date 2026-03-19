@@ -1,7 +1,7 @@
 pipeline {
     agent any
     tools {
-        maven 'Maven' // Adjust the Maven version as needed}
+        maven 'Maven'
     }
     stages {
         stage('Checkout') {
@@ -18,15 +18,13 @@ pipeline {
 
         stage('Code Coverage') {
             steps {
-                jacoco(
-                    execPattern: '**/target/*.exec',
-                    classPattern: '**/target/classes',
-                    sourcePattern: '**/src/main/java',
-                    exclusionPattern: '**/src/test/**',
-
-                    // Threshholds for coverage fails
-                    instructionThreshold: '70',
-                    branchThreshold: '70'
+                recordCoverage(
+                    tools: [[parser: 'JACOCO', pattern: '**/target/site/jacoco/jacoco.xml']],
+                    sourceCodeRetention: 'LAST_BUILD',
+                    qualityGates: [
+                        [threshold: 70.0, metric: 'INSTRUCTION', baseline: 'PROJECT', criticality: 'FAILURE'],
+                        [threshold: 70.0, metric: 'BRANCH', baseline: 'PROJECT', criticality: 'FAILURE']
+                    ]
                 )
             }
         }
