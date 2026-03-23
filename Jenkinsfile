@@ -8,6 +8,12 @@ pipeline {
     tools {
         maven 'Maven'
     }
+
+    environment {
+        DOCKERHUB_CREDENTIALS = 'dockerhub-credentials'
+        DOCKERHUB_REPO = 'isaarinen/sep2'
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -36,7 +42,7 @@ pipeline {
         stage('Deploy Docker Image') {
             steps {
                 withCredentials([usernamePassword(
-                    credentialsId: "${DOCKERHUB_CREDENTIALS}",
+                    credentialsId: env.DOCKERHUB_CREDENTIALS,
                     usernameVariable: 'DOCKERHUB_USER',
                     passwordVariable: 'DOCKERHUB_PASS'
                 )]) {
