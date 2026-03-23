@@ -6,6 +6,12 @@ import static org.example.Calculator.*;
 
 public class Main {
     public static void main(String[] args) {
+        if (System.console() == null) {
+            System.err.println("ERROR: No interactive console found.");
+            System.err.println("Please run this Docker container with the '-it' flags.");
+            System.err.println("Example: docker run -it my-java-app");
+            System.exit(1);
+        }
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Enter language (en, fi, se, jp):");
