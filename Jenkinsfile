@@ -1,3 +1,8 @@
+environment {
+    DOCKERHUB_CREDENTIALS = 'dockerhub-credentials'
+    DOCKERHUB_REPO = 'isaarinen/sep2'
+}
+
 pipeline {
     agent any
     tools {
